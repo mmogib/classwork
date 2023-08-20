@@ -31,7 +31,7 @@ router.post("/classwork", async function (req, res, next) {
     try {
       const courseBaseKey = courses.filter((crs) => crs.name === course)[0];
       const items = await getActiveCLWItems(course);
-      if (items && items.length === 0) {
+      if (!items || items.length === 0) {
         res.send(`
       <div class="alert alert-info" role="alert">
       No grades available at this time, please contact me.
@@ -43,7 +43,7 @@ router.post("/classwork", async function (req, res, next) {
           student_id,
           items
         );
-        if (grades && grades.length === 0) {
+        if (!grades || grades.length === 0) {
           res.send(`
             <div class="alert alert-info" role="alert">
             No grades available at this time, please contact me.
