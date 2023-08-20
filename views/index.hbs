@@ -1,6 +1,52 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
-<button hx-post="/clicked" hx-swap="outerHTML">
-  Click Me
-</button>
+<div class="container mt-2 border p-5">
+
+  <form
+    hx-post="/classwork"
+    hx-swap="innerHTML"
+    hx-target="#studentCLW"
+    hx-indicator="#loading"
+  >
+
+    <div class="row mb-3">
+      <label for="studentID" class="form-label">Personal Code</label>
+      <input
+        type="password"
+        class="form-control"
+        id="studentID"
+        name="studentID"
+        placeholder="If you don't have one, ask me for it."
+      />
+
+    </div>
+    <fieldset class="row mb-3">
+      <legend class="col-form-label col-sm-4 pt-0">Choose your course</legend>
+      <div class="col-sm-8">
+        {{#each courses}}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="courseName"
+              value="{{name}}"
+              id="{{id}}"
+            />
+            <label class="form-check-label" for="{{id}}">
+              {{name}}
+            </label>
+          </div>
+        {{/each}}
+      </div>
+    </fieldset>
+    <button class="btn btn-primary mt-5">Submit</button>
+  </form>
+</div>
+<div>
+  <p
+    id="loading"
+    class="d-flex justify-content-center mt-5 htmx-indicator"
+  >Loading, please wait </p>
+  <div class="d-flex justify-content-center mt-5" id="studentCLW"></div>
+</div>
