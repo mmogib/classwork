@@ -81,7 +81,7 @@ router.get("/classwork/:student_key", async function (req, res) {
     } catch (error) {
       res.send(`
             <div class="alert alert-info" role="alert">
-            ${error}
+            Please provide your code and choose your course.
             </div>
             `);
       // res.status(500).send(new Error(error));
