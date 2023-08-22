@@ -20,7 +20,7 @@ router.post("/classwork", async (req, res) => {
   if (!student_code) {
     res.send(`
     <div class="alert alert-danger" role="alert">
-    Please provide your a correct code.
+    Please provide a correct code.
     </div>
     `);
   } else {
@@ -40,7 +40,7 @@ router.get("/classwork/:student_key", async function (req, res) {
   if (!student_key) {
     res.send(`
     <div class="alert alert-danger" role="alert">
-    Please provide your a correct code.
+    Please provide a correct code.
     </div>
     `);
   } else {
@@ -81,7 +81,7 @@ router.get("/classwork/:student_key", async function (req, res) {
     } catch (error) {
       res.send(`
             <div class="alert alert-info" role="alert">
-            Please provide your a correct code.
+            Please provide a correct code.
             </div>
             `);
       // res.status(500).send(new Error(error));
