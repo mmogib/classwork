@@ -1,52 +1,51 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<p>Please enter the code you received via email, and click `submit`</p>
 
-<div class="container mt-2 border p-5">
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <form
+        hx-post="/classwork"
+        hx-swap="innerHTML"
+        hx-target="#studentCLW"
+        class="mt-2 border p-5"
+      >
 
-  <form
-    hx-post="/classwork"
-    hx-swap="innerHTML"
-    hx-target="#studentCLW"
-    hx-indicator="#loading"
-  >
+        <div class="row mb-3">
+          <label for="student_code" class="form-label">Personal Code</label>
+          <input
+            type="password"
+            class="form-control"
+            id="student_code"
+            name="student_code"
+            placeholder="If you don't have one, ask me for it."
+          />
 
-    <div class="row mb-3">
-      <label for="studentID" class="form-label">Personal Code</label>
-      <input
-        type="password"
-        class="form-control"
-        id="studentID"
-        name="studentID"
-        placeholder="If you don't have one, ask me for it."
-      />
-
-    </div>
-    <fieldset class="row mb-3">
-      <legend class="col-form-label col-sm-4 pt-0">Choose your course</legend>
-      <div class="col-sm-8">
-        {{#each courses}}
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="courseName"
-              value="{{name}}"
-              id="{{id}}"
-            />
-            <label class="form-check-label" for="{{id}}">
-              {{name}}
-            </label>
+        </div>
+        {{!-- <fieldset class="row mb-3">
+          <legend class="col-form-label col-sm-4 pt-0">Choose your course</legend>
+          <div class="col-12 col-md-6">
+            {{#each courses}}
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="course"
+                  value="{{name}}"
+                  id="{{id}}"
+                />
+                <label class="form-check-label" for="{{id}}">
+                  {{name}}
+                </label>
+              </div>
+            {{/each}}
           </div>
-        {{/each}}
-      </div>
-    </fieldset>
-    <button class="btn btn-primary mt-5">Submit</button>
-  </form>
-</div>
-<div>
-  <p
-    id="loading"
-    class="d-flex justify-content-center mt-5 htmx-indicator"
-  >Loading, please wait </p>
-  <div class="d-flex justify-content-center mt-5" id="studentCLW"></div>
+        </fieldset> --}}
+        <button class="btn btn-primary mt-5">Submit</button>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <div class="d-flex justify-content-center" id="studentCLW"></div>
+    </div>
+  </div>
 </div>

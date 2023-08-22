@@ -1,14 +1,29 @@
-<div class="d-flex flex-column">
-  {{#each grades}}
-    <div class="card border-success mb-3 p-1">
-      <div class="card-header bg-transparent border-success">{{label}}</div>
-      <div class="card-body text-success">
-        <h5 class="card-title">{{value}}</h5>
-      </div>
-
+<div class="row">
+  {{#each info}}
+    <div class="col-6">
+      <h5>{{label}}: </h5>
+      <p>{{value}}</p>
     </div>
-
   {{/each}}
+</div>
+<hr />
+<div class="row text-center">
+  <h2 class="text-primary">
+    {{course}}
+    Grades
+  </h2>
+</div>
+<hr />
+<div class="row">
+  <table class="table table-striped">
+    {{#each grades}}
+      <tr class="col-sm-4 swatch-indigo">
+        <td class="p-3 text-success">{{label}}</td>
+        <td class="p-3 text-success bg-body-primary">{{value}} </td>
+      </tr>
+
+    {{/each}}
+  </table>
 </div>
 <div id="alerts" hx-swap-oob="true">
   Saved!

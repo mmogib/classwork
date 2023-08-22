@@ -19,22 +19,22 @@ module.exports = {
     });
     return courses;
   },
-  async getActiveCLWItems(course) {
-    const base = getBase(process.env.AIRTABLE_BASE_COURSES);
-    const coursecBase = await base("courses");
-    const records = await coursecBase
-      .select({
-        maxRecords: 1,
-        filterByFormula: `Name='${course}'`,
-      })
-      .all();
-    const courseBaseKey = records[0].fields.Base;
+  async getActiveCLWItems(courseBaseKey) {
+    // const base = getBase(process.env.AIRTABLE_BASE_COURSES);
+    // const coursecBase = await base("courses");
+    // const records = await coursecBase
+    //   .select({
+    //     maxRecords: 1,
+    //     filterByFormula: `Name='${course}'`,
+    //   })
+    // .all();
+    // const courseBaseKey = records[0].fields.Base;
     const courseBase = getBase(courseBaseKey);
     const table = await courseBase("GradesFields");
     const recs = await table
       .select({
         maxRecords: 100,
-        filterByFormula: `AND(Display='yes',Category='grade')`,
+        filterByFormula: `AND(Display='yes')`,
         sort: [{ field: "Order", direction: "asc" }],
       })
       .all();
@@ -42,27 +42,42 @@ module.exports = {
       return {
         label: rec.fields.Label,
         field: rec.fields.Field,
+        category: rec.fields.Category,
       };
     });
     return items;
   },
+  async checkStudentCode(student_code, courseBaseKey) {
+    try {
+      const courseBase = getBase(courseBaseKey);
+      const table = await courseBase("Grades");
+      const records = await table.find(student_code);
+      if (records) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  },
   async getStudentCLW(courseBaseKey, id, items) {
     const courseBase = getBase(courseBaseKey);
     const table = await courseBase("Grades");
-    const recs = await table
-      .select({
-        maxRecords: 100,
-        fields: items.map((it) => it.field),
-        filterByFormula: `ID=${id}`,
-      })
-      .all();
+    const record = await table.find(id);
     const grades = items.map((item) => {
-      const value = Array.isArray(recs[0].fields[item.field])
-        ? recs[0].fields[item.field][0]
-        : recs[0].fields[item.field];
+      const value = Array.isArray(record.fields[item.field])
+        ? record.fields[item.field][0]
+        : record.fields[item.field];
       return {
         label: item.label,
-        value: Math.round(parseFloat(value) * 100) / 100,
+        category: item.category,
+        value:
+          item.category === "grade"
+            ? isNaN(parseFloat(value))
+              ? value
+              : Math.round(parseFloat(value) * 100) / 100
+            : value,
       };
     });
     return grades;
