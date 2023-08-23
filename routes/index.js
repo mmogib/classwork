@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const getBase = require("../util/airbase");
 const {
+  getCourseBase,
   getActiveCourses,
   getActiveCLWItems,
   getStudentCLW,
@@ -14,6 +15,37 @@ router.get("/", async function (_req, res) {
     title: "Classwork Page",
   });
 });
+
+/* GET home page. */
+router.get(
+  "/:student_code/grades/:course_name",
+  async function (req, res, next) {
+    const { student_code, course_name } = req.params;
+    try {
+      const course = await getCourseBase(course_name);
+      if (!course) {
+        throw Error("No Grades available");
+      }
+      const items = await getActiveCLWItems(course.base);
+      if (!items || items.length === 0) {
+        throw Error("No Grades available");
+      }
+      const grades = await getStudentCLW(course.base, student_code, items);
+
+      if (!grades || grades.length === 0) {
+        throw Error("No Grades available");
+      }
+      res.render("grades", {
+        title: "Classwork",
+        grades: grades.filter((x) => x.category === "grade"),
+        info: grades.filter((x) => x.category === "info"),
+        course: course.name,
+      });
+    } catch (error) {
+      next(Error("No Grades available, please check your link"));
+    }
+  }
+);
 
 router.post("/classwork", async (req, res) => {
   const { student_code } = req.body;
@@ -72,6 +104,7 @@ router.get("/classwork/:student_key", async function (req, res) {
             `);
         } else {
           res.render("grades", {
+            // title: "Classwork",
             grades: grades.filter((x) => x.category === "grade"),
             info: grades.filter((x) => x.category === "info"),
             course: name,

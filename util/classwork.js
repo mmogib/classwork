@@ -1,6 +1,24 @@
 const getBase = require("./airbase");
 
 module.exports = {
+  async getCourseBase(course_name) {
+    const base = getBase(process.env.AIRTABLE_BASE_COURSES);
+    const courseBase = await base("courses");
+    const records = await courseBase
+      .select({
+        maxRecords: 10,
+        filterByFormula: `AND(name='${course_name}',Status='active')`,
+      })
+      .all();
+    const course = records.map((rec) => {
+      return {
+        id: rec.id,
+        name: rec.fields.Name,
+        base: rec.fields.Base,
+      };
+    });
+    return course[0];
+  },
   async getActiveCourses() {
     const base = getBase(process.env.AIRTABLE_BASE_COURSES);
     const courseBase = await base("courses");

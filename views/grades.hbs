@@ -1,3 +1,7 @@
+{{#if title}}
+  <h1>{{course}} | {{title}}</h1>
+{{/if}}
+
 <div class="row">
   {{#each info}}
     <div class="col-6">
@@ -9,7 +13,6 @@
 <hr />
 <div class="row text-center">
   <h2 class="text-primary">
-    {{course}}
     Grades
   </h2>
 </div>
@@ -24,7 +27,4 @@
 
     {{/each}}
   </table>
-</div>
-<div id="alerts" hx-swap-oob="true">
-  Saved!
 </div>
